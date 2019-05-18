@@ -3,26 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+// ReSharper disable file UnusedMember.Global
+
 namespace SeanprCore
 {
     public static class Enemies
     {
-        private static bool tracking;
-        private static List<HealthManager> enemies;
+        private static bool _tracking;
+        private static List<HealthManager> _enemies;
 
         public static IEnumerable<HealthManager> All
         {
             get
             {
-                if (!tracking)
+                if (!_tracking)
                 {
                     throw new InvalidOperationException($"{nameof(Enemies)}.{nameof(All)} called while not tracking");
                 }
 
-                enemies.RemoveAll(enemy => enemy == null);
+                _enemies.RemoveAll(enemy => enemy == null);
 
                 // This check is required because some extremely cursed enemies only have colliders situationally
-                return enemies.Where(enemy => enemy.GetComponent<Collider2D>());
+                return _enemies.Where(enemy => enemy.GetComponent<Collider2D>());
             }
         }
 
@@ -31,19 +33,20 @@ namespace SeanprCore
             On.HealthManager.OnEnable -= TrackEnemy;
             On.HealthManager.OnEnable += TrackEnemy;
 
-            enemies = new List<HealthManager>();
-            tracking = true;
+            _enemies = new List<HealthManager>();
+            _tracking = true;
         }
 
         public static void EndTracking()
         {
             On.HealthManager.OnEnable -= TrackEnemy;
 
-            enemies = null;
-            tracking = false;
+            _enemies = null;
+            _tracking = false;
         }
 
-        public static HealthManager GetClosest(Func<HealthManager, bool> isValid = null, float maxDist = float.PositiveInfinity, Vector3? pos = null)
+        public static HealthManager GetClosest(Func<HealthManager, bool> isValid = null,
+            float maxDist = float.PositiveInfinity, Vector3? pos = null)
         {
             if (pos == null)
             {
@@ -74,9 +77,9 @@ namespace SeanprCore
         private static void TrackEnemy(On.HealthManager.orig_OnEnable orig, HealthManager self)
         {
             // I think there could be duplicates in the case of an hm getting disabled/re-enabled without this check
-            if (!enemies.Contains(self))
+            if (!_enemies.Contains(self))
             {
-                enemies.Add(self);
+                _enemies.Add(self);
             }
         }
     }

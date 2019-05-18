@@ -3,6 +3,8 @@ using System.Linq;
 using HutongGames.PlayMaker;
 using Modding;
 
+// ReSharper disable file UnusedMember.Global
+
 namespace SeanprCore
 {
     public static class PlayMakerExtensions
@@ -20,22 +22,34 @@ namespace SeanprCore
         }
 
         public static FsmState GetState(this PlayMakerFSM self, string name)
-            => self.FsmStates.FirstOrDefault(state => state.Name == name);
+        {
+            return self.FsmStates.FirstOrDefault(state => state.Name == name);
+        }
 
         public static void RemoveActionsOfType<T>(this FsmState self) where T : FsmStateAction
-            => self.Actions = self.Actions.Where(action => !(action is T)).ToArray();
+        {
+            self.Actions = self.Actions.Where(action => !(action is T)).ToArray();
+        }
 
         public static T GetActionOfType<T>(this FsmState self) where T : FsmStateAction
-            => self.Actions.OfType<T>().FirstOrDefault();
+        {
+            return self.Actions.OfType<T>().FirstOrDefault();
+        }
 
         public static T[] GetActionsOfType<T>(this FsmState self) where T : FsmStateAction
-            => self.Actions.OfType<T>().ToArray();
+        {
+            return self.Actions.OfType<T>().ToArray();
+        }
 
         public static void ClearTransitions(this FsmState self)
-            => self.Transitions = new FsmTransition[0];
+        {
+            self.Transitions = new FsmTransition[0];
+        }
 
         public static void RemoveTransitionsTo(this FsmState self, string toState)
-            => self.Transitions = self.Transitions.Where(transition => transition.ToState != toState).ToArray();
+        {
+            self.Transitions = self.Transitions.Where(transition => transition.ToState != toState).ToArray();
+        }
 
         public static void AddTransition(this FsmState self, string eventName, string toState)
         {
@@ -43,17 +57,14 @@ namespace SeanprCore
             Array.Copy(self.Transitions, transitions, self.Transitions.Length);
             self.Transitions = transitions;
 
-            FsmTransition trans = new FsmTransition();
-            trans.ToState = toState;
+            FsmTransition trans = new FsmTransition
+            {
+                ToState = toState,
+                FsmEvent = FsmEvent.EventListContains(eventName)
+                    ? FsmEvent.GetFsmEvent(eventName)
+                    : new FsmEvent(eventName)
+            };
 
-            if (FsmEvent.EventListContains(eventName))
-            {
-                trans.FsmEvent = FsmEvent.GetFsmEvent(eventName);
-            }
-            else
-            {
-                trans.FsmEvent = new FsmEvent(eventName);
-            }
 
             self.Transitions[self.Transitions.Length - 1] = trans;
         }

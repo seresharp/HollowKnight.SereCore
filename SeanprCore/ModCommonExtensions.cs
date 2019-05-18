@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static SeanprCore.LogHelper;
 
-using Logger = Modding.Logger;
+// ReSharper disable file UnusedMember.Global
 
 namespace SeanprCore
 {
-    public static partial class ModCommonExtensions
+    public static class ModCommonExtensions
     {
         // Below functions taken from https://github.com/Kerr1291/ModCommon
         /* MIT License
@@ -39,20 +41,14 @@ namespace SeanprCore
                 return null;
             }
 
-            foreach (var t in gameObject.GetComponentsInChildren<Transform>(true))
-            {
-                if (t.name == name)
-                {
-                    return t.gameObject;
-                }
-            }
-
-            return null;
+            return gameObject.GetComponentsInChildren<Transform>(true)
+                .Where(t => t.name == name)
+                .Select(t => t.gameObject).FirstOrDefault();
         }
 
         public static GameObject FindGameObject(this Scene scene, string name)
         {
-            if (scene == null || !scene.IsValid())
+            if (!scene.IsValid())
             {
                 return null;
             }
@@ -75,7 +71,7 @@ namespace SeanprCore
             }
             catch (Exception e)
             {
-                Logger.LogError("[SeanprCore] - FindGameObject failed:\n" + e.Message);
+                LogError("FindGameObject failed:\n" + e.Message);
             }
 
             return null;

@@ -1,12 +1,15 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+
+// ReSharper disable file UnusedMember.Global
 
 namespace SeanprCore
 {
     public static class GameObjectExtensions
     {
         public static PlayMakerFSM LocateFSM(this GameObject self, string fsmName)
-            => FSMUtility.LocateFSM(self, fsmName);
+        {
+            return FSMUtility.LocateFSM(self, fsmName);
+        }
 
         public static bool IsChildOf(this GameObject self, GameObject maybeParent)
         {
@@ -36,12 +39,7 @@ namespace SeanprCore
 
             component = self.GetComponentInChildren<T>();
 
-            if (component != null)
-            {
-                return component;
-            }
-
-            return self.GetComponentInParent<T>();
+            return component != null ? component : self.GetComponentInParent<T>();
         }
     }
 }

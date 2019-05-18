@@ -1,77 +1,78 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using GlobalEnums;
 using Modding;
 using UnityEngine;
 
+// ReSharper disable file UnusedMember.Local
+// ReSharper disable file UnusedMember.Global
+
 namespace SeanprCore
 {
     public class EnemyDamager : MonoBehaviour
     {
-        public int damage = 5;
-        public float cooldown = 1f;
-        public AttackTypes type = AttackTypes.Generic;
-        public bool gainSoul;
-        public bool bypassIframes;
-        public bool bypassStun;
-
-        private List<ColliderInfo> hitReponders = new List<ColliderInfo>();
+        private readonly List<ColliderInfo> _hitReponders = new List<ColliderInfo>();
+        public bool BypassIframes;
+        public bool BypassStun;
+        public float Cooldown = 1f;
+        public int Damage = 5;
+        public bool GainSoul;
+        public AttackTypes Type = AttackTypes.Generic;
 
         private void Update()
         {
-            for (int i = 0; i < hitReponders.Count; i++)
+            for (int i = 0; i < _hitReponders.Count; i++)
             {
-                if (hitReponders[i].responder == null)
+                if (_hitReponders[i].Responder == null)
                 {
-                    hitReponders.RemoveAt(i);
+                    _hitReponders.RemoveAt(i);
                     i--;
                     continue;
                 }
 
-                hitReponders[i].cooldown -= Time.deltaTime;
+                _hitReponders[i].Cooldown -= Time.deltaTime;
 
-                if (!hitReponders[i].touching)
+                if (!_hitReponders[i].Touching)
                 {
                     continue;
                 }
 
-                if (hitReponders[i].cooldown <= 0)
+                if (_hitReponders[i].Cooldown <= 0)
                 {
-                    hitReponders[i].cooldown = cooldown;
-                    DoDamage(hitReponders[i]);
+                    _hitReponders[i].Cooldown = Cooldown;
+                    DoDamage(_hitReponders[i]);
                 }
             }
         }
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (!enabled || collider.gameObject.layer != (int)PhysLayers.ENEMIES)
+            if (!enabled || collider.gameObject.layer != (int) PhysLayers.ENEMIES)
             {
                 return;
             }
 
             IHitResponder hit = collider.gameObject.GetComponentInSelfChildOrParent<IHitResponder>();
 
-            ColliderInfo colInfo = hitReponders.FirstOrDefault(info => info.responder == hit);
+            ColliderInfo colInfo = _hitReponders.FirstOrDefault(info => info.Responder == hit);
 
             if (colInfo == null)
             {
-                colInfo = new ColliderInfo()
+                colInfo = new ColliderInfo
                 {
-                    responder = hit,
-                    cooldown = 0
+                    Responder = hit,
+                    Cooldown = 0
                 };
 
-                hitReponders.Add(colInfo);
+                _hitReponders.Add(colInfo);
             }
 
-            colInfo.touching = true;
+            colInfo.Touching = true;
         }
 
         private void OnTriggerExit2D(Collider2D collider)
         {
-            if (!enabled || collider.gameObject.layer != (int)PhysLayers.ENEMIES)
+            if (!enabled || collider.gameObject.layer != (int) PhysLayers.ENEMIES)
             {
                 return;
             }
@@ -82,29 +83,31 @@ namespace SeanprCore
                 return;
             }
 
-            foreach (ColliderInfo info in hitReponders)
+            foreach (ColliderInfo info in _hitReponders)
             {
-                if (info.responder == hit)
+                if (info.Responder != hit)
                 {
-                    info.touching = false;
-                    break;
+                    continue;
                 }
+
+                info.Touching = false;
+                break;
             }
         }
 
         private void OnDisable()
         {
-            hitReponders.Clear();
+            _hitReponders.Clear();
         }
 
         private void DoDamage(ColliderInfo target)
         {
-            if (damage <= 0)
+            if (Damage <= 0)
             {
                 return;
             }
 
-            Component c = target.responder as Component;
+            Component c = target.Responder as Component;
             if (c == null)
             {
                 return;
@@ -112,12 +115,12 @@ namespace SeanprCore
 
             FSMUtility.SendEventToGameObject(c.gameObject, "TAKE DAMAGE");
 
-            HitInstance hit = new HitInstance()
+            HitInstance hit = new HitInstance
             {
                 Source = gameObject,
-                AttackType = type,
+                AttackType = Type,
                 CircleDirection = false,
-                DamageDealt = damage,
+                DamageDealt = Damage,
                 IgnoreInvulnerable = false,
                 MagnitudeMultiplier = 0,
                 MoveAngle = 0,
@@ -127,40 +130,40 @@ namespace SeanprCore
                 IsExtraDamage = false
             };
 
-            if (target.responder is HealthManager hm)
+            if (target.Responder is HealthManager hm)
             {
                 float oldIframes = 0f;
-                if (bypassIframes)
+                if (BypassIframes)
                 {
                     oldIframes = ReflectionHelper.GetAttr<HealthManager, float>(hm, "evasionByHitRemaining");
                     ReflectionHelper.SetAttr(hm, "evasionByHitRemaining", 0f);
                 }
 
                 PlayMakerFSM stunFSM = null;
-                if (bypassStun)
+                if (BypassStun)
                 {
                     stunFSM = ReflectionHelper.GetAttr<HealthManager, PlayMakerFSM>(hm, "stunControlFSM");
-                    ReflectionHelper.SetAttr(hm, "stunControlFSM", (PlayMakerFSM)null);
+                    ReflectionHelper.SetAttr(hm, "stunControlFSM", (PlayMakerFSM) null);
                 }
 
                 hm.Hit(hit);
 
-                if (bypassIframes)
+                if (BypassIframes)
                 {
                     ReflectionHelper.SetAttr(hm, "evasionByHitRemaining", oldIframes);
                 }
 
-                if (bypassStun)
+                if (BypassStun)
                 {
                     ReflectionHelper.SetAttr(hm, "stunControlFSM", stunFSM);
                 }
             }
             else
             {
-                target.responder.Hit(hit);
+                target.Responder.Hit(hit);
             }
 
-            if (gainSoul)
+            if (GainSoul)
             {
                 Ref.Hero.SoulGain();
             }
@@ -168,9 +171,9 @@ namespace SeanprCore
 
         private class ColliderInfo
         {
-            public IHitResponder responder;
-            public bool touching;
-            public float cooldown;
+            public float Cooldown;
+            public IHitResponder Responder;
+            public bool Touching;
         }
     }
 }

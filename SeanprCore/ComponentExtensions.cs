@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
+
+// ReSharper disable file UnusedMember.Global
 
 namespace SeanprCore
 {
     public static class ComponentExtensions
     {
         public static PlayMakerFSM LocateFSM(this Component self, string fsmName)
-            => self.gameObject.LocateFSM(fsmName);
+        {
+            return self.gameObject.LocateFSM(fsmName);
+        }
     }
 }
