@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace SeanprCore
+namespace SereCore
 {
     [PublicAPI]
     public static class DictionaryExtensions
@@ -12,6 +12,12 @@ namespace SeanprCore
             {
                 yield return (pair.Key, pair.Value);
             }
+        }
+
+        public static void Deconstruct<TKey, TVal>(this KeyValuePair<TKey, TVal> self, out TKey key, out TVal val)
+        {
+            key = self.Key;
+            val = self.Value;
         }
     }
 }

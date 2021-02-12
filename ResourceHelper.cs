@@ -5,19 +5,23 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 using UnityEngine;
-using static SeanprCore.LogHelper;
+using static SereCore.LogHelper;
 
-// ReSharper disable file UnusedMember.Global
-
-namespace SeanprCore
+namespace SereCore
 {
+    [PublicAPI]
     public static class ResourceHelper
     {
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static Dictionary<string, Sprite> GetSprites(string prefix = null)
         {
             Assembly callingAssembly = new StackFrame(1, false).GetMethod()?.DeclaringType?.Assembly;
+            if (callingAssembly == typeof(SereCore).Assembly)
+            {
+                callingAssembly = new StackFrame(2, false).GetMethod()?.DeclaringType?.Assembly;
+            }
 
             Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
 
@@ -42,8 +46,9 @@ namespace SeanprCore
                         stream.Read(buffer, 0, buffer.Length);
 
                         // Create texture from bytes
-                        Texture2D tex = new Texture2D(1, 1);
+                        Texture2D tex = new Texture2D(1, 1, TextureFormat.RGBA32, false);
                         tex.LoadImage(buffer, true);
+                        tex.filterMode = FilterMode.Point;
 
                         string resName = Path.GetFileNameWithoutExtension(resource);
                         if (!string.IsNullOrEmpty(prefix))

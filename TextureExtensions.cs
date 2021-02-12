@@ -1,13 +1,13 @@
 ﻿using System;
 using System.IO;
+using JetBrains.Annotations;
 using UnityEngine;
-using static SeanprCore.LogHelper;
+using static SereCore.LogHelper;
 using Object = UnityEngine.Object;
 
-// ReSharper disable file UnusedMember.Global
-
-namespace SeanprCore
+namespace SereCore
 {
+    [PublicAPI]
     public static class TextureExtensions
     {
         public static void SaveToFile(this Texture2D self, string path)

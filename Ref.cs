@@ -1,10 +1,14 @@
-﻿// ReSharper disable file UnusedMember.Global
+﻿using JetBrains.Annotations;
+using UnityEngine;
 
-namespace SeanprCore
+namespace SereCore
 {
+    [PublicAPI]
     public static class Ref
     {
         private static HeroController _hero;
+        private static Rigidbody2D _heroRb2d;
+        private static PlayMakerFSM _heroNailFSM;
 
         private static GameManager _gm;
 
@@ -25,6 +29,42 @@ namespace SeanprCore
                 }
 
                 return _hero;
+            }
+        }
+
+        public static Rigidbody2D HeroRigidbody
+        {
+            get
+            {
+                if (_heroRb2d == null)
+                {
+                    if (Hero == null)
+                    {
+                        return null;
+                    }
+
+                    _heroRb2d = Hero.GetComponent<Rigidbody2D>();
+                }
+
+                return _heroRb2d;
+            }
+        }
+
+        public static PlayMakerFSM HeroNailFSM
+        {
+            get
+            {
+                if (_heroNailFSM == null)
+                {
+                    if (Hero == null)
+                    {
+                        return null;
+                    }
+
+                    _heroNailFSM = Hero.transform.Find("Attacks/Slash").GetComponent<PlayMakerFSM>();
+                }
+
+                return _heroNailFSM;
             }
         }
 

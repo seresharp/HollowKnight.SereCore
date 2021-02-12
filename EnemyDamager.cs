@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using GlobalEnums;
+using JetBrains.Annotations;
 using Modding;
 using UnityEngine;
 
-// ReSharper disable file UnusedMember.Local
-// ReSharper disable file UnusedMember.Global
-
-namespace SeanprCore
+namespace SereCore
 {
+    [PublicAPI]
     public class EnemyDamager : MonoBehaviour
     {
         private readonly List<ColliderInfo> _hitReponders = new List<ColliderInfo>();
@@ -47,7 +46,7 @@ namespace SeanprCore
 
         private void OnTriggerEnter2D(Collider2D collider)
         {
-            if (!enabled || collider.gameObject.layer != (int) PhysLayers.ENEMIES)
+            if (!enabled || collider.gameObject.layer != (int)PhysLayers.ENEMIES)
             {
                 return;
             }
@@ -72,7 +71,7 @@ namespace SeanprCore
 
         private void OnTriggerExit2D(Collider2D collider)
         {
-            if (!enabled || collider.gameObject.layer != (int) PhysLayers.ENEMIES)
+            if (!enabled || collider.gameObject.layer != (int)PhysLayers.ENEMIES)
             {
                 return;
             }
@@ -143,7 +142,7 @@ namespace SeanprCore
                 if (BypassStun)
                 {
                     stunFSM = ReflectionHelper.GetAttr<HealthManager, PlayMakerFSM>(hm, "stunControlFSM");
-                    ReflectionHelper.SetAttr(hm, "stunControlFSM", (PlayMakerFSM) null);
+                    ReflectionHelper.SetAttr(hm, "stunControlFSM", (PlayMakerFSM)null);
                 }
 
                 hm.Hit(hit);

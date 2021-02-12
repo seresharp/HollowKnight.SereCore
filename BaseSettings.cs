@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Reflection;
+using JetBrains.Annotations;
 using Modding;
 using UnityEngine;
-using static SeanprCore.LogHelper;
+using static SereCore.LogHelper;
 
-namespace SeanprCore
+namespace SereCore
 {
+    [PublicAPI]
     [Serializable]
     public class BaseSettings : ModSettings, ISerializationCallbackReceiver
     {

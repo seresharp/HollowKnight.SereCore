@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using HutongGames.PlayMaker;
+using JetBrains.Annotations;
 using Modding;
 
-// ReSharper disable file UnusedMember.Global
-
-namespace SeanprCore
+namespace SereCore
 {
+    [PublicAPI]
     public static class PlayMakerExtensions
     {
         public static void AddState(this PlayMakerFSM self, FsmState state)

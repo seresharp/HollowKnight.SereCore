@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using Modding;
 using UnityEngine;
-using static SeanprCore.LogHelper;
+using static SereCore.LogHelper;
 
-// ReSharper disable file UnusedMember.Global
-
-namespace SeanprCore
+namespace SereCore
 {
+    [PublicAPI]
     public static class Fonts
     {
         private static readonly Dictionary<string, Font> FontCache;

@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace SeanprCore
+namespace SereCore
 {
     [PublicAPI]
     public static class StringExtensions

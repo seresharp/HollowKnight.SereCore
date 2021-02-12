@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.271
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeanprCore", "SeanprCore\SeanprCore.csproj", "{25BCB7AA-4E83-480F-992A-C3B2A37C221D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SereCore", "SereCore.csproj", "{25BCB7AA-4E83-480F-992A-C3B2A37C221D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

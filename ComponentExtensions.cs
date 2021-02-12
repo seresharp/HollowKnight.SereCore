@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using JetBrains.Annotations;
+using UnityEngine;
 
-// ReSharper disable file UnusedMember.Global
-
-namespace SeanprCore
+namespace SereCore
 {
+    [PublicAPI]
     public static class ComponentExtensions
     {
         public static PlayMakerFSM LocateFSM(this Component self, string fsmName)

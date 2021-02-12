@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static SeanprCore.LogHelper;
+using static SereCore.LogHelper;
 
-// ReSharper disable file UnusedMember.Global
-
-namespace SeanprCore
+namespace SereCore
 {
+    [PublicAPI]
     public static class ModCommonExtensions
     {
         // Below functions taken from https://github.com/Kerr1291/ModCommon

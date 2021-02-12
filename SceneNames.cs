@@ -1,10 +1,12 @@
-﻿// ReSharper disable file InconsistentNaming
-// ReSharper disable file UnusedMember.Global
+﻿using JetBrains.Annotations;
 
-namespace SeanprCore
+namespace SereCore
 {
     // Names as constants so I don't misspell them
-    public static class SceneNames
+    // Not static so that the deprecated version can inherit
+    // Much better than copy/pasting all of this
+    [PublicAPI]
+    public abstract class SceneNames
     {
         public const string Menu_Title = nameof(Menu_Title);
         public const string End_Credits = nameof(End_Credits);

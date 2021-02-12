@@ -2,11 +2,11 @@
 
 // ReSharper disable file UnusedMember.Global
 
-namespace SeanprCore
+namespace SereCore
 {
     internal static class LogHelper
     {
-        private static readonly SimpleLogger Logger = new SimpleLogger(nameof(SeanprCore));
+        private static readonly SimpleLogger Logger = new SimpleLogger(nameof(SereCore));
 
         public static void Log(string message)
         {
